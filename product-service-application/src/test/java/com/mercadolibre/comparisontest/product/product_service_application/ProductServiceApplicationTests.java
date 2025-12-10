@@ -1,0 +1,13 @@
+package com.mercadolibre.comparisontest.product.product_service_application;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ProductServiceApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

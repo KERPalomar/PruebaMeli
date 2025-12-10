@@ -1,0 +1,77 @@
+server:
+    port: 8082
+    servlet:
+        context-path: /api
+
+spring:
+    application:
+        name: comparison-service
+
+# configuración de endpoints de otros servicios
+service:
+    product-service:
+        url: http://localhost:8081
+    specification-service:
+        url: http://localhost:8083
+
+#Configuración para discovery de Eureka
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Configuración de Feign
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+      product-service:
+        connectTimeout: 3000
+        readTimeout: 8000
+      specification-service:
+        connectTimeout: 3000
+        readTimeout: 8000
+  circuitbreaker:
+    enabled: true
+
+# Configuración de resiliencia
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+      specificationService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-componnents: always
+
+# OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
